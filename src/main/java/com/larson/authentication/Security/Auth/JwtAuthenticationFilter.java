@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
             if(!user.isPresent()) throw new Exception("Failed to find user");
 
             User authenticatedUser = user.get();
+
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(authenticatedUser, null, authenticatedUser.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

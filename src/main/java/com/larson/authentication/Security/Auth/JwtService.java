@@ -28,7 +28,7 @@ public class JwtService {
 
     @Value("${CLERK_SECRET}")
     private String token;
-    
+
     private Clerk sdk;
     private final UserRepository userRepository;
 
@@ -46,6 +46,7 @@ public class JwtService {
 
         // if user exists, get user, else create new user and return it.
         User user = userQuery.isPresent() ? userQuery.get() : CreateNewUserFromClerkData(oauthID);
+    
         return Optional.of(user);
     }
 
@@ -65,13 +66,9 @@ public class JwtService {
         String firstName = userData.firstName().get();
         String lastName = userData.lastName().get();
         List<EmailAddress> emails = userData.emailAddresses().get();
-        User user = new User();
-        user.setFirstname(firstName);
-        user.setLastname(lastName);
-        user.setAdmin(false);
-        user.setOauthID(oauthID);
-        if(emails.size() > 0)
-            user.setEmail(emails.get(0).emailAddress());
+        String email = emails.get(0).emailAddress();
+        User user = new User(oauthID, firstName, lastName, email);
+        user.setRoles(null);
         userRepository.save(user);
         return user;
 
