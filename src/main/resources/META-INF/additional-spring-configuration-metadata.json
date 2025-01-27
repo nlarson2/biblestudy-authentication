@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "CLERK_SECRET",
+    "type": "java.lang.String",
+    "description": "A description for 'CLERK_SECRET'"
+  },
+  {
+    "name": "DB_USERNAME",
+    "type": "java.lang.String",
+    "description": "A description for 'DB_USERNAME'"
+  },
+  {
+    "name": "DB_URL",
+    "type": "java.lang.String",
+    "description": "A description for 'DB_URL'"
+  },
+  {
+    "name": "DB_PASSWORD",
+    "type": "java.lang.String",
+    "description": "A description for 'DB_PASSWORD'"
+  }
+]}
