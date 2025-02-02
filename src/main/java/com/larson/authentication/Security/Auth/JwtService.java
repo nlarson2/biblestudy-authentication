@@ -33,21 +33,34 @@ public class JwtService {
     private final UserRepository userRepository;
 
 
-    public Optional<User> getUserData(String jwtToken) throws TokenVerificationException, Exception {
+    public Optional<User> getUserData(String jwtToken) throws Exception {
         
-        // get the data from the provided token
-        VerifyTokenOptions options = VerifyTokenOptions.Builder.withSecretKey(token).build();
-        Claims claims = VerifyToken.verifyToken(jwtToken, options);
-        if(claims == null) return null;
+        
+        try{
+            // get the data from the provided token
+            Claims claims = GetTokenDetail(jwtToken);
+            if(claims == null) return null;
+    
+            User user = GetUser(claims);
+            return Optional.of(user);
 
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    private Claims GetTokenDetail(String jwtToken)  throws TokenVerificationException{
+        VerifyTokenOptions options = VerifyTokenOptions.Builder.withSecretKey(token).build();
+        return VerifyToken.verifyToken(jwtToken, options);
+    }
+
+    private User GetUser(Claims claims) throws Exception {
         // parse out oauthID / clerk user id
         String oauthID = claims.get("sub").toString();
         Optional<User> userQuery = userRepository.findByOauthID(oauthID);
 
         // if user exists, get user, else create new user and return it.
-        User user = userQuery.isPresent() ? userQuery.get() : CreateNewUserFromClerkData(oauthID);
-    
-        return Optional.of(user);
+        return  userQuery.isPresent() ? userQuery.get() : CreateNewUserFromClerkData(oauthID);
     }
 
     private User CreateNewUserFromClerkData(String oauthID) throws Exception {

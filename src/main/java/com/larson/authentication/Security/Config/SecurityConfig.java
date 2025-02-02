@@ -27,9 +27,8 @@ public class SecurityConfig {
         return http
                 .cors(withDefaults())
                 .authorizeHttpRequests((authorize) -> authorize
-                    .requestMatchers("/api/public").permitAll()
-                    .requestMatchers("/api/private").authenticated()
-                    .requestMatchers("/api/private-scoped").hasAuthority("ROLE_ADMIN")
+                    .requestMatchers("/api/**").authenticated()
+                    .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
